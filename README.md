@@ -15,7 +15,7 @@ does not participate in their dynamics.
 
 ## Demonstration
 
-![Sixteen GADS nodes exchanging self-authored compositions](docs/assets/gads-network-demonstration.gif)
+![Sixteen GADS nodes exchanging self-authored compositions](docs/assets/IMG_2868.gif)
 
 The visualization follows sixteen independent GADS nodes arranged as a 4 x 4
 torus. Each cell is one complete system, and its color tracks local mean fitness.
