@@ -1,0 +1,22 @@
+name: Smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile
+        run: python -m py_compile GADS.py mux_fitness.py run.py test_mux_sampling.py test_network_smoke.py
+      - name: Verify sampled MUX
+        run: python test_mux_sampling.py
+      - name: Run network exchange smoke
+        run: python test_network_smoke.py

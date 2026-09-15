@@ -1,0 +1,40 @@
+{
+  "seed": 42,
+  "generations": 12,
+  "telemetry_every": 1,
+  "show_progress": false,
+  "heartbeat_seconds": 0,
+  "save_result": null,
+  "network": {
+    "topology": "grid",
+    "nodes": 4,
+    "share_min_age": 0,
+    "arrival_grace": 2,
+    "singularity_threshold": 1.1
+  },
+  "mux": {
+    "size": 20,
+    "scoring": "rebalanced",
+    "sample_rows": 128,
+    "sample_seed": 42
+  },
+  "gads": {
+    "POPULATION_SIZE": 24,
+    "NUM_PARENTS": 12,
+    "ENABLE_CROSSOVER": false,
+    "USE_FITNESS": true,
+    "CAPTURE_PROB": 0.3,
+    "BOUNDARY_MUTATION_PROB": 0.2,
+    "MUTATION_PROB": 0.1,
+    "BOUNDARY_INSERT_PROB": 0.15,
+    "BOUNDARY_REMOVE_PROB": 0.01,
+    "OPEN_PROB": 0.01,
+    "BASE_GENE_PROB": 0.5,
+    "MCO_DECAY": 0.99,
+    "MIN_CAPTURE_LEN": 2,
+    "MIN_LEN": 8,
+    "MAX_LEN": 16,
+    "ELITE_FRAC": 0.0,
+    "DB_THRESHOLD": 1
+  }
+}
