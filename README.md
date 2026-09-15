@@ -13,6 +13,19 @@ The network has no barrier, consensus round, shared generation clock, or central
 controller. One master process starts the nodes and collects telemetry, but it
 does not participate in their dynamics.
 
+## Demonstration
+
+![Sixteen GADS nodes exchanging self-authored compositions](docs/assets/gads-network-demonstration.png)
+
+The visualization follows sixteen independent GADS nodes arranged as a 4 x 4
+torus. Each cell is one complete system, and its color tracks local mean fitness.
+Arrows appear when a composition created by one node crosses a network edge and
+takes root in a neighbor. The important event is not the movement of an
+organism, a solution, or a fitness score. It is the arrival of a reusable piece
+of representation. The receiving node admits that structure to its own
+Meta-Genome, after which its local population determines whether the structure
+is used and survives.
+
 ## Start here
 
 Python 3.11 or newer is recommended. No third-party packages are required.
@@ -43,6 +56,28 @@ may also cross a network edge and become available to a neighboring GADS.
 The transmitted object is the composition itself. Compositions carry their
 content by value as immutable tuples, so another node can receive and use one
 without sharing an identifier table, cache, or global namespace.
+
+This encoding is what makes the network possible without a representational
+controller. A composition recursively contains the atoms and compositions from
+which it was built. Its structure is its identity. The same value can cross a
+process boundary and still mean the same thing at the receiving node because
+decoding depends only on the value itself, not on state held by its creator.
+
+That gives exchange four useful properties:
+
+- **Self-contained.** A packet carries the structure needed to decode it. There
+  is no second lookup against a shared registry.
+- **Namespace-free.** Nodes do not have to agree on locally assigned identifiers
+  or translate between private symbol tables.
+- **Idempotent.** Structural equality tells a node whether an arriving
+  composition is already active, so repeated arrivals do not create separate
+  copies of the same representation.
+- **Locally governed.** Arrival makes a composition available for sampling. It
+  does not force the population to use it or protect it from later removal.
+
+The relevant mechanics are visible in the
+[value-based Meta-Genome and decoder](GADS.py#L170-L191) and the
+[exchange and admission loop](run.py#L224-L258).
 
 Exchange does not transfer:
 
@@ -153,6 +188,29 @@ python run.py \
 
 When `sample_rows` equals the complete row count, evaluation is exhaustive and
 the sample remains fixed because it already contains every possible case.
+
+## Why this architecture has room to scale
+
+The implementation removes several sources of coordination cost that would
+otherwise grow with the network. This is a statement about the architecture,
+not a claim that useful adaptation or execution speed scales linearly.
+
+| Property | Scaling consequence | Implementation |
+| --- | --- | --- |
+| Bounded neighborhoods | A node has at most two neighbors in a line or ring and four in a grid or torus, independent of total network size | [Topology construction](run.py#L85-L120) |
+| By-value compositions | Representation can move without a global name service, ownership table, or translation step | [Composition semantics](GADS.py#L170-L191) |
+| Asynchronous nodes | Progress does not require a generation barrier or waiting for the slowest node | [Independent worker loop](run.py#L164-L191) |
+| Selective local exchange | Grid and torus nodes send an eligible batch through one selected edge rather than broadcasting it across the network | [Bounded exchange](run.py#L232-L245) |
+| Sampled environments | MUX evaluation materializes and evaluates `sample_rows` cases rather than all `2^inputs` cases | [Sample compilation](mux_fitness.py#L143-L185) |
+
+For the supported topologies, per-node neighborhood size remains bounded as more
+nodes are added. Total computation and communication still grow with the number
+of nodes, and the current Python multiprocessing and telemetry implementation
+may introduce practical bottlenecks. What the design provides is a path to
+horizontal experimentation without introducing a global representation service
+or a synchronization step into the dynamics. Throughput, convergence, and the
+effect of network size remain measurements to be made rather than results
+claimed here.
 
 ## GADS representation
 
