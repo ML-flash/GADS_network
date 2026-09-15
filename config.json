@@ -1,0 +1,40 @@
+{
+  "seed": 42,
+  "generations": 6000,
+  "telemetry_every": 5,
+  "show_progress": true,
+  "heartbeat_seconds": 2.0,
+  "save_result": "results/last_run.json",
+  "network": {
+    "topology": "torus",
+    "nodes": 16,
+    "share_min_age": 2,
+    "arrival_grace": 2,
+    "singularity_threshold": 0.95
+  },
+  "mux": {
+    "size": 11,
+    "scoring": "original",
+    "sample_rows": 2048,
+    "sample_seed": 42
+  },
+  "gads": {
+    "POPULATION_SIZE": 1500,
+    "NUM_PARENTS": 850,
+    "ENABLE_CROSSOVER": false,
+    "USE_FITNESS": true,
+    "CAPTURE_PROB": 0.28,
+    "BOUNDARY_MUTATION_PROB": 0.70,
+    "MUTATION_PROB": 0.02,
+    "BOUNDARY_INSERT_PROB": 0.003,
+    "BOUNDARY_REMOVE_PROB": 0.020,
+    "OPEN_PROB": 0.005,
+    "BASE_GENE_PROB": 0.41,
+    "MCO_DECAY": 0.98,
+    "MIN_CAPTURE_LEN": 2,
+    "MIN_LEN": 70,
+    "MAX_LEN": 320,
+    "ELITE_FRAC": 0.0,
+    "DB_THRESHOLD": 2
+  }
+}
